@@ -7,7 +7,9 @@ So_long is a School 42 project that involves creating a simple 2D game using the
 - **Graphics Library**: MLX42
 - **Language**: C
 
+<p align="center">
 ![image](https://github.com/user-attachments/assets/bfc24c42-5133-4240-bbbb-4935b5258a73)
+</p>
 
 This repository includes both the game implementation and necessary submodules to set up MLX42 for the project.
 
