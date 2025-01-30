@@ -20,6 +20,27 @@ int	empty_map(t_game *game)
 		return (0);
 }
 
+int	ifexit(t_game *game)
+{
+	if (game->n_collec == 0)
+	{
+		ft_printf("You won!\n");
+		mlx_close_window(game->mlx);
+		return (0);
+	}
+	else
+		return (0);
+	return (1);
+}
+
+void	close_window(void *param)
+{
+	t_game	*game;
+
+	game = param;
+	mlx_close_window(game->mlx);
+}
+
 int	map_valid(t_game *game)
 {
 	if (!empty_map(game))

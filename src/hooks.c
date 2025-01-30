@@ -12,25 +12,38 @@
 
 #include "so_long.h"
 
-void	close_window(void *param)
+int	get_instance_index(t_game *game, int x, int y)
 {
-	t_game	*game;
+	size_t	i;
 
-	game = param;
-	mlx_close_window(game->mlx);
+	i = 0;
+	while (i < game->images->collec->count)
+	{
+		if (game->images->collec->instances[i].x == x
+			&& game->images->collec->instances[i].y == y)
+			return (i);
+		i++;
+	}
+	return (-1);
 }
 
-int	ifexit(t_game *game)
+void	disable_fly(t_game *game, int new_x, int new_y)
 {
-	if (game->n_collec == 0)
-	{
-		ft_printf("You won!\n");
-		mlx_close_window(game->mlx);
-		return (0);
-	}
-	else
-		return (0);
-	return (1);
+	int	index;
+
+	index = get_instance_index(game, new_x, new_y);
+	if (index > -1)
+		game->images->collec->instances[index].enabled = 0;
+}
+
+void	update_actor_pos(t_game *game, int new_x, int new_y)
+{
+	game->x_player = new_x;
+	game->y_player = new_y;
+	game->images->actor->instances[0].x = new_x;
+	game->images->actor->instances[0].y = new_y;
+	game->map[new_y / P_S][new_x / P_S] = PLAYER;
+	game->move_count++;
 }
 
 int	move_plz(t_game *game, int x, int y)
@@ -44,6 +57,7 @@ int	move_plz(t_game *game, int x, int y)
 	{
 		if (game->map[new_y / P_S][new_x / P_S] == COINS)
 		{
+			disable_fly(game, new_x, new_y);
 			game->n_collec--;
 			game->collected++;
 		}
@@ -51,22 +65,10 @@ int	move_plz(t_game *game, int x, int y)
 			return (ifexit(game));
 		if (game->map[new_y / P_S][new_x / P_S] != MAP_EXIT)
 			game->map[game->y_player / P_S][game->x_player / P_S] = FLOOR;
-		game->x_player = new_x;
-		game->y_player = new_y;
-		game->images->actor->instances[0].x = new_x;
-		game->images->actor->instances[0].y = new_y;
-		game->map[new_y / P_S][new_x / P_S] = PLAYER;
-		game->move_count++;
+		update_actor_pos(game, new_x, new_y);
 		return (1);
 	}
 	return (0);
-}
-
-void	ifmove(t_game *game)
-{
-	draw_map(game, game->images);
-	draw_game(game, game->images);
-	ft_printf("Moves: %d\n", game->move_count);
 }
 
 void	keyhook(mlx_key_data_t keydata, void *param)
@@ -93,5 +95,5 @@ void	keyhook(mlx_key_data_t keydata, void *param)
 			move = move_plz(game, P_S, 0);
 	}
 	if (move)
-		ifmove(game);
+		ft_printf("Moves: %d\n", game->move_count);
 }

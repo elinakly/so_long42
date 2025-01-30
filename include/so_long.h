@@ -83,6 +83,7 @@ int		form_map(t_game *game);
 int		invalid_char(t_game *game);
 int		valid_file(char *map_path);
 int		valid_path(t_game *game);
+int		ifexit(t_game *game);
 
 void	entry(t_game *game);
 void	free_map(char **map);
