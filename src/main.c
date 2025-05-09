@@ -25,7 +25,7 @@ int32_t	main(int argc, char **argv)
 	if (!game.map || !game.map2)
 		return (ft_printf("Map reading error\n"), EXIT_FAILURE);
 	if (!map_valid(&game) || !valid_path(&game))
-		return (free_map(game.map), EXIT_FAILURE);
+		return (free_map(game.map), free_map(game.map2), EXIT_FAILURE);
 	init_game(&game);
 	return (EXIT_SUCCESS);
 }
